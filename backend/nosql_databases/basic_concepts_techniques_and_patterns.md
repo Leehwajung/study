@@ -97,7 +97,7 @@
 - 정의: 각 노드로부터 클럭 값의 튜플 $ V[0], V[1], ..., V[n] $로 정의됨
     - 분산 사니라오에서 노드 $ i $는, 주어진 클럭에 알고 있는 상태와 다른 (복제본) 노드의 상태를 나타내는 클럭 값의 튜플을 유지함 ($ V_i [0], V_i [1], ..., V_i [i], ..., V_i [n] $ (순서대로 노드의 클럭 값들, 여기서 $ V_i [i] $는 자기 자신))
     - 클럭 값은 한 노드의 로컬 클럭, 버전/리비전 번호나 기타 오디널 (Ordinal) 값으로부터 파생된 실제 타임 스템프일 수 있음
-    - ![Figure 3.1.: Vector Clocks](./images/3_1_vector_clocks.png)
+    - ![Figure 3.1.: Vector Clocks](images/3_1_vector_clocks.png)
     - e.g. 노드 번호가 2인 벡터 클럭이 다음의 값을 가질 때: $$ V_2 [0]=45, V_2 [1]=3, V_2 [2]=55 $$
         - 두 번째 노드의 관점에서 그 벡터 클럭이 참조하는 데이터 셋에 대해 다음의 업데이트가 발생했음을 나타냄:
             - 노드 1의 업데이트로 리비전 $ 3 $을 생성함
@@ -108,8 +108,8 @@
         - 즉, 실행 중인 노드가 내부 업데이트를 즉시 볼 수 있음을 의미함
     - 노드 $ i $가 노드 k에 메시지를 보내면, 자신의 클럭 값 $ V_i [i] $를 먼저 진전시키고 벡터 클럭 $ V_i $ 를 노드 k로의 메시지에 어태치함
         - 이에 따라, 메시지가 보내진 시점에 노드 $ i $가 받는 노드 k에게 내부 상태와 다른 노드에 대한 뷰를 알려 줌
-    - 노드 $ i $가 노드 $ j $로부터 메시지를 받으면, 먼저 벡터 클럭 $ V_i [i] $를 진전시킨 후, 그 자신의 벡터 클럭에 노드 $ j $로부터의 메시지에 어태치된 벡터 클럭 $ V_message $를 병합하고 다음을 수행: $$ V_i=max(V_i, \, V_message) $$
-        - 부분 순서를 도출하1기 위해 두 벡터 클럭 $ V_i $와 $ V_j $를 비교하기 위해 다음의 룰이 적용됨: $$ V_i > V_j, \, if \, ∀k \, V_i [k] > V_j [k] $$
+    - 노드 $ i $가 노드 $ j $로부터 메시지를 받으면, 먼저 벡터 클럭 $ V_i [i] $를 진전시킨 후, 그 자신의 벡터 클럭에 노드 $ j $로부터의 메시지에 어태치된 벡터 클럭 $ V_{message} $를 병합하고 다음을 수행: $$ V_i=max(V_i, \ V_{message}) $$
+        - 부분 순서를 도출하1기 위해 두 벡터 클럭 $ V_i $와 $ V_j $를 비교하기 위해 다음의 룰이 적용됨: $$ V_i > V_j, \ if \ ∀k \ V_i [k] > V_j [k] $$
             - $ V_i > V_j $ 도 아니고 $ V_i < V_j $ 도 아니면, 동시 업데이트로 인한 충돌이 발생한 것이며, 클라이언트 애플리케이션에서 등의 해결이 필요함
 - 벡터 클럭은 "복수 복제본에 대한 쓰기 간의 일관성을 해결하기 위해" 활용될 수 있음
     - 업데이트 간에 가볍게(Casual) 추론하는 것을 허용하기 때문
@@ -134,7 +134,7 @@
     - 상태의 노드 간 전파와 관련하여 확장 성을 제공
     - SPOF(Single Point of Failure)를 피함
     - 최종 (Eventual) 일관성만 달성할 수 있음
-        - $ n $개의 노드 클러스터에서 상태에 대한 정보가 확산되려면 $ O(log \, ⁡n) $ 라운드가 필요하기 때문
+        - $ n $개의 노드 클러스터에서 상태에 대한 정보가 확산되려면 $ O(log \ ⁡n) $ 라운드가 필요하기 때문
 - 상태 전송 모델
     - 클라이언트나 서버 사이에나 서버들 간에, 데이터나, 데이터의 델타(deltas)가 교환됨
     - 데이터베이스 서버 노드는 충돌되는 버전을 위해 그들의 데이터와 상태 버전 트리를 위한 벡터 클럭을 유지함
@@ -142,7 +142,7 @@
     - 클라이언트는 그들이 이미 요청하고 업데이트한 데이터 조각을 위해 벡터 클럭을 유지함
 - 상태 전송 모델에서의 벡터 클럭의 교환 및 처리 방법
     - 쿼리 처리
-        - ![Figure 3.3.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Query Processing](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_query_processing.png)
+        - ![Figure 3.2.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Query Processing](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_query_processing.png)
         1. 클라이언트가 데이터를 위해 쿼리할 때, 클라이언트는 그 요청에 따라 요청된 데이터의 그의 벡터 클럭을 보냄
         2. 데이터베이스 서버 노드가, 데이터 조각을 위한 그의 상태 트리의 일부분을 응답함
             - 여기서의 상태 트리 일부분: 클라이언트 요청에 어태치된 벡터 클럭과 그 서버의 벡터 클럭에 선행하는 것
@@ -150,13 +150,13 @@
             - 이 단계에서, 클라이언트는 또한 잠재적인 버전 충돌을 해결함
                 - 클라이언트가 읽기 시간에 충돌을 해결하지 않은 경우, 클라이언트가 접속한 복제본 노드가 유지하는 리비전과 비교된 데이터의 아웃데이트된 리비전에 대한 업데이트를 서밋할 수 있기 때문에 필요함
     - 업데이트 처리
-        - ![Figure 3.3.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Update Processing](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_update_processing.png)
+        - ![Figure 3.2.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Update Processing](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_update_processing.png)
         1. 읽기 요청의 경우처럼, 클라이언트는 또한, 업데이트 요청에 따라 업데이트될 데이터에 대한 그들의 벡터 클럭을 어태치해야 함
         2. 접속된 복제본 서버는 전송된 벡터 클럭에 따른 클라이언트 상태가 현재 서버 상태보다 우선하고 업데이트 요청을 생략하는지 체크함
             - 이전 단락에서 설명한대로, 클라이언트가 최신 버전을 가져 와서 읽기 시간의 버전 충돌을 수정해야 하기 때문
             - 클라이언트의 전송 받은 벡터 클럭이 자기 자신의 클럭보다 클 경우, 서버는 업데이트 요청을 실행함
     - 노드 간 가시핑 (Gossiping)
-        - ![Figure 3.3.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Gossip](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_gossip.png)
+        - ![Figure 3.2.: Vector Clocks - Exchange via Gossip in State Transfer Mode - Gossip](images/3_2_vector_clocks_exchange_via_gossip_in_state_transfer_mode_gossip.png)
         - 동일한 데이터 파티션을 담당하는 복제본은 백그라운드에서 벡터 클럭과 버전 트리를 교환하고 동기화를 유지하기 위해 병합함
 - 연산 전송 모델
     - 로컬에서 유지되는 데이터에 적용 가능한 연산이 이 모델에서 통신(Communicate)됨
@@ -166,8 +166,8 @@
         2. 모든 이전 작업이 실행될 때까지 연산 적용을 지연시켜야 함
             - 이는 지연된 연산들의 큐를 유지하고 다른 복제본의 것들과 교환과 통합을 해야 함을 의미
     - 복제본 노드가 유지해야 하는 벡터 클럭:
-        - $ V_state $: 데이터의 마지막 업데이트 상태에 해당하는 벡터 클럭
-        - $ V_i $: ($ V_state $ 와 비교하여) 수신된 벡터 클럭과의 병합이 이미 발생한 벡터 클럭 자체
+        - $ V_{state} $: 데이터의 마지막 업데이트 상태에 해당하는 벡터 클럭
+        - $ V_i $: ($ V_{state} $ 와 비교하여) 수신된 벡터 클럭과의 병합이 이미 발생한 벡터 클럭 자체
         - $ V_j $: 복제본 노드 $ j $의 마지막 가십 (Gossip) 메시지에 의해 수신된 벡터 클럭 (각 해당 복제본 노드에 의해)
 - 상태 전송 모델에서의 벡터 클럭의 교환 및 처리 (읽기/업데이트/노드간 메시지에서)
     - 쿼리 처리
@@ -182,8 +182,8 @@
         1. 클라이언트가 업데이트 요청을 서밋하면, 접촉된 복제본 노드는 이 업데이트 연산을 버퍼링함
             - 유지하는 3 가지의 벡터 클럭과 이미 버퍼링된 연산들의 큐를 고려하여 그의 로컬 상태에 적용될 수 있을 때까지
             - 버퍼링된 업데이트 연산에는 다음의 두 벡터 클럭이 태깅됨:
-                - $ V_client $: 업데이트를 서밋할 때 클라이언트 뷰
-                - $ V_received $: 업데이트를 받았을 때 복제본 노드의 뷰
+                - $ V_{client} $: 업데이트를 서밋할 때 클라이언트 뷰
+                - $ V_{received} $: 업데이트를 받았을 때 복제본 노드의 뷰
                     - 즉, 위에서 언급된 벡터 클럭 $ V_i $
         2. 수신된 업데이트 연산에 우연하게 (Casually) 선행하는 모든 다른 연산들이 도착하여 적용되었을 때, 클라이언트에 의해 요청된 업데이트가 실행될 수 있음
     - 노드 간 가시핑 (Gossiping)
@@ -263,7 +263,7 @@
                     - 일부는 자동 파티셔닝과 노드 간의 데이터 밸런싱도 지원함
                         -  e.g. MongoDB (version 1.6)
 - 데이터베이스 객체를 서버에 매핑하는 방법
-    - 명백한 접근 방법: $$ partition=hash(o) \; mod n \quad with \, o=object \, to \, hash, \, n=number \, of \, nodes $$
+    - 명백한 접근 방법: $$ partition=hash(o) \; mod n \quad with \ o=object \ to \ hash, \ n=number \ of \ nodes $$
         - 사용 가능한 데이터베이스 노드 세트에 대한 데이터베이스 객체 기본 키를 해싱함
         - 이 프로시저의 단점은 노드가 떠나고 조인할 때마다 적어도 데이터의 일부를 재분배해야 한다는 점임
     - 메모리 캐싱 시나리오에서 암묵적으로 데이터 재분배가 발생할 수 있는 경우:
